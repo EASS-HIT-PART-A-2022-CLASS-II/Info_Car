@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
 from starlette.responses import HTMLResponse
 from starlette.status import HTTP_400_BAD_REQUEST
-from app.databases import cars
+from databases import cars
 class Car(BaseModel):
     make: Optional[str]
     model: Optional[str]

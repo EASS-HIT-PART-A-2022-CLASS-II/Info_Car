@@ -26,7 +26,7 @@ app.mount("/static",StaticFiles(directory="static",html=True),name="static")
 
 @app.get("/",response_class=RedirectResponse)
 def root(request:Request):
-    return RedirectResponse(url="/carscd ")
+    return RedirectResponse(url="/cars")
 
 @app.get("/cars", response_class=HTMLResponse)
 def get_cars(request:Request,number:Optional[str]=Query("10",max_length=3)):

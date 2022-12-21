@@ -8,6 +8,9 @@ from typing import Optional, List, Dict
 from starlette.responses import HTMLResponse
 from starlette.status import HTTP_400_BAD_REQUEST
 from databases import cars
+
+templates=Jinja2Templates(directory="templates")
+
 class Car(BaseModel):
     make: Optional[str]
     model: Optional[str]
@@ -16,21 +19,24 @@ class Car(BaseModel):
     engine: Optional[str] = "V4"
     autonomous: Optional[bool]
     sold: Optional[List[str]]
+
 app= FastAPI()
 
-@app.get("/")
-def root():
-    return{"Welcome to :" "Your Firest API in FastAPI"}
+app.mount("/static",StaticFiles(directory="static",html=True),name="static")
 
-@app.get("/cars",response_model=List[Dict[str,Car]])
-def get_cars(number:Optional[str]=Query("10",max_length=3)):
+@app.get("/",response_class=RedirectResponse)
+def root(request:Request):
+    return RedirectResponse(url="/carscd ")
+
+@app.get("/cars", response_class=HTMLResponse)
+def get_cars(request:Request,number:Optional[str]=Query("10",max_length=3)):
     response=[]
     for id,car in list(cars.items())[:int(number)]:
         to_add={}
         to_add[id]=car
         response.append(to_add)
         
-    return response
+    return templates.TemplateResponse("index.html",{"request":request,"cars":response,"title":"Home"})
 
 @app.get("/cars/{id}",response_model=Car)
 def get_cars_by_id(id:int=Path(...,ge=0,lt=1000)):

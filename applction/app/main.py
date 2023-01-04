@@ -7,18 +7,11 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
 from starlette.responses import HTMLResponse
 from starlette.status import HTTP_400_BAD_REQUEST
-from databases import cars
+from applction.app.databases1 import cars
 
 templates = Jinja2Templates(directory="templates")
 
-class Car(BaseModel):
-    make: Optional[str]
-    model: Optional[str]
-    year: Optional[int] = Field(...,ge=1970,lt=2022)
-    price: Optional[float]
-    engine: Optional[str] = "V4"
-    autonomous: Optional[bool]
-    sold: Optional[List[str]]
+
 
 app = FastAPI()
 

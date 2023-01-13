@@ -1,6 +1,7 @@
 import unittest
 import requests
 import main
+import pymongo
 
 class SmokeTest(unittest.TestCase):
     def test_status_code(self):
@@ -10,3 +11,4 @@ class SmokeTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+

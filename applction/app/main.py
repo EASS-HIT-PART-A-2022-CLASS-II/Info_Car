@@ -7,8 +7,13 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
 from starlette.responses import HTMLResponse
 from starlette.status import HTTP_400_BAD_REQUEST
-from databases import cars
-
+from db import cars
+from pymongo import MongoClient
+import json
+import pymongo
+#from applction.app.db import conn
+#from routes.user import user
+#import pymongo
 templates = Jinja2Templates(directory="templates")
 class Car(BaseModel):
     make: Optional[str]
@@ -19,9 +24,8 @@ class Car(BaseModel):
     autonomous: Optional[bool]
     sold: Optional[List[str]]
 
-
 app = FastAPI()
-
+#app.include_router(user)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/", response_class=RedirectResponse)

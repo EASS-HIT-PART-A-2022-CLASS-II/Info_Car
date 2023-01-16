@@ -1,9 +1,14 @@
-from pydantic import BaseModel
 from pymongo import MongoClient
-from fastapi import FastAPI, File
-client=MongoClient("mongodb://localhost:27017")
-db = client["car"]
-async def upload_file(file: bytes = File(...)):
-    # insert the file into the database
-    result = db["files"].insert_one({"file": file})
-    return {"file_id": str(result.inserted_id)}
+import json
+import pymongo
+from databases import cars
+
+client = pymongo.MongoClient("mongodb+srv://oritskovich:S8QlGyGKXRe72I8x@oritskovich.iewit1v.mongodb.net/?retryWrites=true&w=majority")
+#db = client.test
+db = client["cars"]
+collection = db["car"]
+with open('cars.json') as f:
+    data = json.loads(f.read())
+
+data_list = list(data.values())
+collection.insert_many(data_list)

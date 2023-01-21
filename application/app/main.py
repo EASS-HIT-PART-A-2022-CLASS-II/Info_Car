@@ -15,6 +15,12 @@ import pymongo
 #from routes.user import user
 #import pymongo
 templates = Jinja2Templates(directory="templates")
+ # Connect to the MongoDB instance
+client = pymongo.MongoClient("mongodb+srv://oritskovich:S8QlGyGKXRe72I8x@oritskovich.iewit1v.mongodb.net/?retryWrites=true&w=majority")
+   # Select the database and collection
+db = client["cars"]
+cars_collection = db["car"]
+ 
 class Car(BaseModel):
     make: Optional[str]
     model: Optional[str]
@@ -41,7 +47,11 @@ def get_cars(request: Request, number: Optional[str] = Query("10",max_length=3))
 
 @app.post("/search", response_class=RedirectResponse)
 def search_cars(id: str = Form(...)):
-    return RedirectResponse("/cars/" + id, status_code=302)
+    car = cars_collection.find_one({"id": id})
+    if car:
+        return RedirectResponse("/cars/" + id, status_code=302)
+    else:
+        return {"error": "Car not found"}
 
 @app.get("/cars/{id}", response_class=HTMLResponse)
 def get_car_by_id(request: Request, id: int = Path(...,ge=0,lt=1000)):
@@ -55,32 +65,12 @@ def get_car_by_id(request: Request, id: int = Path(...,ge=0,lt=1000)):
 def create_car(request: Request):
     return templates.TemplateResponse("create.html", {"request": request, "title": "Create Car"})
 
-@app.post("/cars", status_code=status.HTTP_201_CREATED)
-def add_cars(
-    make: Optional[str] = Form(...),
-    model: Optional[str] = Form(...),
-    year: Optional[str] = Form(...),
-    price: Optional[float] = Form(...),
-    engine: Optional[str] = Form(...),
-    autonomous: Optional[bool] = Form(...),
-    sold: Optional[List[str]] = Form(None),
-    min_id: Optional[int] = Body(0)):
-    body_cars = [Car(make=make,model=model,year=year,price=price,engine=engine,autonomous=autonomous,sold=sold)]
-    if len(body_cars) < 1:
-        raise HTTPException(status_code=HTTP_400_BAD_REQUEST,detail="No cars to add.")
-    min_id = len(cars.values()) + min_id
-    for car in body_cars:
-        while cars.get(min_id):
-            min_id += 1
-        cars[min_id] = car
-        min_id += 1
-    return RedirectResponse(url="/cars", status_code=302)
-
 @app.get("/edit", response_class=HTMLResponse)
 def edit_car(request: Request, id: int = Query(...)):
-    car = cars.get(id)
+    # Find the car document by ID
+    car = cars_collection.find_one({"id": id})
     if not car:
-        return templates.TemplateResponse("search.html", {"request": request, "id": id, "car": car, "title": "Edit Car"}, status_code=status.HTTP_404_NOT_FOUND)
+     return templates.TemplateResponse("search.html", {"request": request, "id": id, "car": car, "title": "Edit Car"}, status_code=status.HTTP_404_NOT_FOUND)
     return templates.TemplateResponse("edit.html", {"request": request, "id": id, "car": car, "title": "Edit Car"})
 
 @app.post("/cars/{id}")
@@ -104,9 +94,12 @@ def update_car(request: Request, id: int,
     response[id] = cars[id]
     return RedirectResponse(url="/cars", status_code=302)
 
+
 @app.get("/delete/{id}", response_class=RedirectResponse)
 def delete_car(request: Request, id: int = Path(...)):
-    if not cars.get(id):
+    # Delete the car
+    result = cars_collection.delete_one({"id": id})
+    if result.deleted_count == 0:
         return templates.TemplateResponse("search.html", {"request": request, "id": id, "title": "Edit Car"}, status_code=status.HTTP_404_NOT_FOUND)
-    del cars[id]
+        del cars[id]
     return RedirectResponse(url="/cars")

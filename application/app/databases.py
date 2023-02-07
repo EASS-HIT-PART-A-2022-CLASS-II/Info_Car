@@ -1,4 +1,4 @@
-import json
+# import json
 cars = {
     1: {
         "make": "CarBrand",
@@ -50,5 +50,5 @@ cars = {
         "sold": ["NA","AF","OC","SA"]
     }
 }
-with open("cars.json", "w") as f:
-    json.dump(cars, f)
+# with open("cars.json", "w") as f:
+#     json.dump(cars, f)

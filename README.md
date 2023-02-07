@@ -1,38 +1,36 @@
-# Info_Car
-Getting information about a car easily!
+##Info_Car - Easy Car Information Management
 
-Features: 
-By using the application, you can easily manage car information software while updating the information
-⭐ Adding a new car
+With this application, managing car information has never been easier!
+#Features: 
+⭐ Add a new car
 
-⭐ Editing(update) an info car
+⭐ Update car information
 
-⭐ Deleting car
+⭐ Delete car information
  
-⭐ get car information
+⭐ Retrieve car information
 
-How to run the app
-Pre-requisites
-⭐ Make sure you have docker installed on your machine
+#Prerequisites
+Before running the app, make sure you have the following:
 
-Instructions:
-Open CMD/Terminal inside a desired folder and run the following command:
-git clone https://github.com/EASS-HIT-PART-A-2022-CLASS-II/Info_Car.git
-Then go inside the app folder:
-cd applction after this cd app
-To start the app, enter the following command:
-docker build -t "fast-api" . 
+Docker installed on your machine
+A virtual environment (If not, follow these steps to create one:
+Install virtualenv: pip install virtualenv
+Create a virtual environment for your project: virtualenv myenv
+Activate the virtual environment: source myenv/bin/activate
+Install FastAPI in the virtual environment: pip install fastapi)
+#Running the App
+Open your terminal in the desired folder and run this command to clone the repository: git clone https://github.com/EASS-HIT-PART-A-2022-CLASS-II/Info_Car.git
+Go to the application/app folder: cd application/app
+Run the following command to start the app:
+Copy code
+docker build -t "fast-api" .
 docker run  -p 80:80 fast-api
-Congrats! The app is running 🤩 now all you have to do is to open your browser and type:
-http://localhost:8000/
-Technologies
-This app was built with the following technologies:
+The app is now running! Open your browser and go to http://localhost:8000/
 
-⭐ Backend: FastAPI (Python)
-
-⭐ Frontend: 
-
-⭐ DB: MongoDB
-
+#Technologies Used
+Backend: FastAPI (Python)
+Frontend: HTML, React
+Database: MongoDB
 Contact
-Or itskovich 
+Or itskovich

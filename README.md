@@ -32,5 +32,6 @@ The app is now running! Open your browser and go to http://localhost:8000/
 Backend: FastAPI (Python)
 Frontend: HTML, React
 Database: MongoDB
+
 Contact
 Or itskovich

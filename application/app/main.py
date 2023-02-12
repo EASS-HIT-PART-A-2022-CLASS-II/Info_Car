@@ -20,9 +20,9 @@ from jinja2 import Environment, FileSystemLoader
 # from routes.user import user
 # import pymongo
 templates = Jinja2Templates(directory="templates")
+
 # Connect to the MongoDB instance
-client = pymongo.MongoClient(
-    "mongodb+srv://oritskovich:S8QlGyGKXRe72I8x@oritskovich.iewit1v.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb://oritskovich:mypassword@mongodb:27017/")
 # Select the database and collection
 db = client["cars"]
 cars_collection = db["car"]

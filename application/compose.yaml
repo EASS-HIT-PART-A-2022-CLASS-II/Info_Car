@@ -1,20 +1,27 @@
 version: '3'
 services:
-  mongo:
+  mongodb:
     image: mongo:latest
     container_name: mongo
     env_file:
       - ./.env
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+     - MONGO_INITDB_ROOT_USERNAME=oritskovich
+     - MONGO_INITDB_ROOT_PASSWORD=mypassword
     volumes:
-      - mongo:/data/db
+      - mongodb_data:/data/db
     ports:
-      - '6000:27017'
-
+      - '27017:27017'
+  fastapi:
+    image: fast-api
+    ports:
+      - '80:80'
+    depends_on:
+      - mongodb
+    environment:
+      "MONGODB_URI": "mongodb://oritskovich:mypassword@mongodb:27017/"
+    links:
+      - mongodb
 volumes:
-  mongo:
-
   mongodb_data:
+    driver: local
